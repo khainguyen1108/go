@@ -1,3 +1,3 @@
-module go.mod
+module GO/GO-ECOMMERCE-BACKEND-API
 
 go 1.25.0
