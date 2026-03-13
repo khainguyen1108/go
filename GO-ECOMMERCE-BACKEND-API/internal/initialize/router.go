@@ -1,4 +1,4 @@
-package routers
+package initialize
 
 import (
 	"GO-ECOMMERCE-BACKEND-API/internal/container"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine {
+func InitRouter() *gin.Engine {
 	r := gin.Default()
 	r.SetTrustedProxies(nil)
 	v1 := r.Group("/v1/2024")

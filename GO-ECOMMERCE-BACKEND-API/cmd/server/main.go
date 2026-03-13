@@ -1,10 +1,5 @@
 package main
 
-import (
-	routers "GO-ECOMMERCE-BACKEND-API/internal/routers"
-)
+import "GO-ECOMMERCE-BACKEND-API/internal/initialize"
 
-func main() {
-	r := routers.NewRouter()
-	r.Run()
-}
+func main() { initialize.Run() }

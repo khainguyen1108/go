@@ -1,0 +1,18 @@
+server:
+  port: 8090
+mysql:
+  host: 127.0.0.1
+  port: 33306
+  username: baonk
+  password: baonk123
+  dbname: shopdevgo
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifeTime: 3600
+log:
+  logLevel: debug
+  fileLogName: './storages/logs/dev.001.log'
+  maxSize: 500
+  maxBackups: 3
+  maxAge: 28
+  compress: true
