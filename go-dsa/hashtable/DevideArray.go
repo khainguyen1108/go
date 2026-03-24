@@ -1,5 +1,5 @@
 package hashtable
 
-func divideArray(nums []int) bool {
+func minMoves(matrix []string) int {
 
 }
