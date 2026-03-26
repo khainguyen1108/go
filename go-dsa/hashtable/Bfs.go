@@ -30,18 +30,15 @@ func BFS2D(grid []string, start, end NodeBfs) int {
 			fmt.Printf("(%d,%d):%d ", n.row, n.col, n.steps)
 		}
 		fmt.Println("]")
-		// Lấy phần tử đầu queue
 		curr := queue[0]
 		queue = queue[1:]
 
 		fmt.Printf("👉 Đang xét: (%d,%d) bước %d\n", curr.row, curr.col, curr.steps)
-		// Đến đích rồi!
 		if curr.row == end.row && curr.col == end.col {
 			fmt.Println("─────────────────────────────────────────────")
 			fmt.Printf("✅ Tìm thấy đích sau %d bước!\n", curr.steps)
 			return curr.steps
 		}
-		// Duyệt 4 hướng
 		for i := 0; i < 4; i++ {
 			nr := curr.row + dr[i]
 			nc := curr.col + dc[i]
@@ -54,6 +51,5 @@ func BFS2D(grid []string, start, end NodeBfs) int {
 			fmt.Println()
 		}
 	}
-	fmt.Println("❌ Không tìm được đường!")
 	return -1
 }
