@@ -1,19 +1,51 @@
 package initialize
 
 import (
-	"GO-ECOMMERCE-BACKEND-API/internal/container"
+	"GO-ECOMMERCE-BACKEND-API/global"
+	"GO-ECOMMERCE-BACKEND-API/internal/routers"
+	"GO-ECOMMERCE-BACKEND-API/pkg/constant"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
-	r := gin.Default()
-	r.SetTrustedProxies(nil)
-	v1 := r.Group("/v1/2024")
+	var r *gin.Engine
+
+	switch global.Config.Server.Mode {
+	case constant.DEV:
+		{
+			gin.SetMode(gin.DebugMode)
+			gin.ForceConsoleColor()
+			r = gin.Default()
+		}
+	case constant.PROD:
+		{
+			gin.SetMode(gin.ReleaseMode)
+			r = gin.New()
+		}
+	default:
+		{
+			gin.SetMode(gin.ReleaseMode)
+			r = gin.New()
+		}
+	}
+
+	// r.Use() // logging
+	// r.Use() // cross
+	// r.Use() //limiter
+	manageRouter := routers.RouterGroupApp.Manage
+	userRouter := routers.RouterGroupApp.User
+
+	MainGroup := r.Group("/v1/2024")
 	{
-		v1.GET("/ping", container.TestControllerInstance.Pong)
-		v1.GET("/ping2", container.TestControllerInstance.PongOpenApi)
-		v1.GET("/user/:id", container.UserControllerInstance.GetUserById)
+		MainGroup.GET("/checkStatus") // tracking monitor
+	}
+	{
+		userRouter.InitUserRouter(MainGroup)
+		userRouter.InitProductRouter(MainGroup)
+	}
+	{
+		manageRouter.InitAdminRouter(MainGroup)
 	}
 
 	return r

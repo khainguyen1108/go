@@ -1,5 +1,6 @@
 server:
   port: 8090
+  mode: 'DEV'
 mysql:
   host: 127.0.0.1
   port: 33306
@@ -16,3 +17,8 @@ log:
   maxBackups: 3
   maxAge: 28
   compress: true
+redis:
+  host: 127.0.0.1
+  port: 6381
+  password:
+  database: 0
