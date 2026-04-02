@@ -5,6 +5,7 @@ type Config struct {
 	Server ServerSetting `mapstructure:"server"`
 	Log    LogSetting    `mapstructure:"log"`
 	Redis  RedisSetting  `mapstructure:"redis"`
+	Jwt    JwtSetting    `mapstructure:"jwt"`
 }
 
 type RedisSetting struct {
@@ -37,4 +38,9 @@ type LogSetting struct {
 	MaxBackups  int    `mapstructure:"maxBackUps"`
 	MaxAge      int    `mapstructure:"maxAge"`
 	Compress    bool   `mapstructure:"compress"`
+}
+
+type JwtSetting struct {
+	AccessSecretKey  string `mapstructure:"accessSecretKey"`
+	RefreshSecretKey string `mapstructure:"refreshSecretKey"`
 }

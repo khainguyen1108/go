@@ -3,20 +3,40 @@ package response
 const (
 	CodeSuccess         = 20001 //Success
 	ErrCodeParamInvalid = 20003 //Email is invalid
+
 	ErrInvalidToken     = 30001 //Token is invalid
 	ErrValidationFailed = 30002
-	ErrInternalError    = 50001
 
 	// User related errors
-	ErrUserNotFound = 40001
+	ErrUserNotFound            = 40001
+	ErrUserAlreadyUnregistered = 40002
+	ErrPasswordNotMatch        = 40003
+	ErrTokenNotFound           = 40004
+	ErrCanNotDetectMapClaims   = 40005
+	ErrAlogrithmNotSupported   = 40006
+	ErrTokenExpired            = 40007
+
+	// Internal errors
+
+	ErrInternalError              = 50001
+	ErrGenerateTokenFailed        = 50004
+	ErrCreateAccountSessionFailed = 50005
 )
 
 // message
 var msg = map[int]string{
-	CodeSuccess:         "success",
-	ErrCodeParamInvalid: "param invalid",
-	ErrInvalidToken:     "token is invalid",
-	ErrValidationFailed: "validation failed",
-	ErrInternalError:    "internal server error",
-	ErrUserNotFound:     "user not found",
+	CodeSuccess:                   "success",
+	ErrCodeParamInvalid:           "param invalid",
+	ErrInvalidToken:               "token is invalid",
+	ErrValidationFailed:           "validation failed",
+	ErrInternalError:              "internal server error",
+	ErrUserNotFound:               "user not found",
+	ErrUserAlreadyUnregistered:    "user already unregistered",
+	ErrPasswordNotMatch:           "password not match",
+	ErrGenerateTokenFailed:        "failed to generate token",
+	ErrCreateAccountSessionFailed: "failed to create account session",
+	ErrTokenNotFound:              "token not found",
+	ErrCanNotDetectMapClaims:      "cannot detect map claims from token",
+	ErrAlogrithmNotSupported:      "signing algorithm is not supported",
+	ErrTokenExpired:               "token is expired",
 }

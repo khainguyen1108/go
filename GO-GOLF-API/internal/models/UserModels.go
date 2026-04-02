@@ -1,10 +1,18 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type LoginRequest struct {
-	UserId   string `json:"userId" binding:"required"`
-	Password string `json:"password" binding:"required,min=6"`
+	UserId    string `json:"userId" validate:"required" code:"1001"`
+	Password  string `json:"password" validate:"required,min=6" code:"1002"`
+	UserAgent string
+}
+
+type LoginResponse struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
 }
 
 type User struct {
@@ -47,4 +55,17 @@ type User struct {
 	Score                  int        `db:"score"`
 	ScoreCnt               int        `db:"score_cnt"`
 	UseStatus              int        `db:"use_status"`
+}
+
+type AccountSession struct {
+	Id           int       `db:"id"`
+	UserId       int       `db:"user_id"`
+	SessionId    string    `db:"session_id"`
+	RefreshToken string    `db:"refresh_token"`
+	IsUsed       int       `db:"is_used"`
+	IsRevoked    int       `db:"is_revoked"`
+	DeviceInfo   string    `db:"device_info"`
+	ExpiresAt    time.Time `db:"expires_at"`
+	CreatedAt    time.Time `db:"created_at"`
+	UpdatedAt    time.Time `db:"updated_at"`
 }

@@ -34,9 +34,9 @@ func InitRouter() *gin.Engine {
 	// r.Use() // logging
 	// r.Use() // cross
 	// r.Use() //limiter
+	r.Use(middlewares.ValidatorMiddleware())
 	r.Use(middlewares.LoggerMiddleware())
 	r.Use(middlewares.CustomRecoveryMiddleware())
-	r.Use(middlewares.ErrorHandlingMiddleware())
 	manageRouter := routers.RouterGroupApp.Manage
 	userRouter := routers.RouterGroupApp.User
 

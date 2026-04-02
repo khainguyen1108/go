@@ -9,6 +9,7 @@ package wire
 import (
 	"GO-GOLF-API/internal/controller"
 	"GO-GOLF-API/internal/repo"
+	"GO-GOLF-API/internal/service"
 	"GO-GOLF-API/internal/service/impl"
 )
 
@@ -19,4 +20,10 @@ func InitUserRouterHandler() (*controller.UserController, error) {
 	iUserService := impl.NewUserService(iUserRepository)
 	userController := controller.NewUserController(iUserService)
 	return userController, nil
+}
+
+func InitUserServiceHandler() (service.IUserService, error) {
+	iUserRepository := repo.NewUserRepository()
+	iUserService := impl.NewUserService(iUserRepository)
+	return iUserService, nil
 }

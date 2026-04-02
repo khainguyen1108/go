@@ -4,11 +4,11 @@ import (
 	"GO-GOLF-API/internal/models"
 	"GO-GOLF-API/internal/service"
 	"GO-GOLF-API/pkg/response"
-	"database/sql"
-	"errors"
+	"GO-GOLF-API/pkg/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 )
 
 type UserController struct {
@@ -19,38 +19,33 @@ func NewUserController(userService service.IUserService) *UserController {
 	return &UserController{userService: userService}
 }
 
-func (uc *UserController) GetUserById(c *gin.Context) {
-	response.SuccessResponse(c, response.CodeSuccess, map[string]string{"id": c.Param("id")})
+func (uc *UserController) GetUserById(c *gin.Context) (interface{}, error) {
+	user := c.MustGet("user")
+	return user, nil
 }
 
-func (uc *UserController) Login(c *gin.Context) {
+func (uc *UserController) Login(c *gin.Context) (interface{}, error) {
 	// Add login logic here return one map
 	var loginUser models.LoginRequest
 
 	if err := c.ShouldBindJSON(&loginUser); err != nil {
-		c.Error(&response.AppError{
-			StatusCode: http.StatusBadRequest,
-			AppCode:    response.ErrValidationFailed,
-			RootErr:    err,
-		})
-		return
+		return nil, response.NewAppError(http.StatusBadRequest, response.ErrValidationFailed, err)
+	}
+	validation, exists := c.Get("validation")
+	if !exists {
+		return nil, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, gin.Error{})
 	}
 
+	if apiErr := utils.ValidateStruct(loginUser, validation.(*validator.Validate)); apiErr != nil {
+		return nil, apiErr
+	}
+
+	loginUser.UserAgent = c.Request.UserAgent()
 	responseData, err := uc.userService.Login(loginUser)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			response.ErrorResponse(c, http.StatusNotFound, response.ErrUserNotFound)
-			return
-		}
-
-		c.Error(&response.AppError{
-			StatusCode: http.StatusInternalServerError,
-			AppCode:    response.ErrInternalError,
-			RootErr:    err,
-		})
-		return
+		return nil, err.(*response.AppError)
 	}
 
-	response.SuccessResponse(c, response.CodeSuccess, responseData)
+	return responseData, nil
 }
