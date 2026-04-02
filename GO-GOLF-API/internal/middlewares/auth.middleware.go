@@ -4,10 +4,14 @@ import (
 	"GO-GOLF-API/internal/service"
 	"GO-GOLF-API/pkg/response"
 	JwtUtil "GO-GOLF-API/pkg/utils"
+	RedisUtils "GO-GOLF-API/pkg/utils"
+	"context"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 )
 
 func AuthenMiddleware(userService service.IUserService) gin.HandlerFunc {
@@ -30,8 +34,33 @@ func AuthenMiddleware(userService service.IUserService) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+		userId := int(claims["user_id"].(float64))
+		iat := int64(claims["iat"].(float64))
+		timeLimit, errRedis := RedisUtils.Get(context.Background(), strconv.Itoa(userId))
+		if errRedis != nil && errRedis != redis.Nil {
+			response.HandleGlobalError(c, errRedis)
+			c.Abort()
+			return
+		}
+
+		if errRedis != redis.Nil {
+			timeStr, ok := timeLimit.(string)
+			if !ok {
+				response.HandleGlobalError(c, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, gin.Error{}))
+			}
+			ts, errParse := strconv.ParseInt(timeStr, 10, 64)
+			if errParse != nil {
+				response.HandleGlobalError(c, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, errParse))
+			}
+			if ts > iat {
+				response.HandleGlobalError(c, response.NewAppError(http.StatusUnauthorized, response.ErrUserAlreadyBlocked, gin.Error{}))
+				c.Abort()
+				return
+			}
+		}
+
 		//get user info
-		userInfo, userErr := userService.GetUserInfoById(int(claims["user_id"].(float64)))
+		userInfo, userErr := userService.GetUserInfoById(userId)
 
 		if userErr != nil {
 			response.HandleGlobalError(c, userErr)

@@ -49,3 +49,36 @@ func (uc *UserController) Login(c *gin.Context) (interface{}, error) {
 
 	return responseData, nil
 }
+
+func (uc *UserController) LogOut(c *gin.Context) (interface{}, error) {
+	sessionId := c.GetString("section_id")
+	if sessionId == "" {
+		return nil, response.NewAppError(http.StatusBadRequest, response.ErrLogoutFailed, gin.Error{})
+	}
+
+	return nil, uc.userService.LogOut(sessionId)
+}
+
+func (uc *UserController) Refresh(c *gin.Context) (interface{}, error) {
+	var refreshRequest models.RefreshRequest
+
+	if err := c.ShouldBindJSON(&refreshRequest); err != nil {
+		return nil, response.NewAppError(http.StatusBadRequest, response.ErrValidationFailed, err)
+	}
+	validation, exists := c.Get("validation")
+	if !exists {
+		return nil, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, gin.Error{})
+	}
+
+	if apiErr := utils.ValidateStruct(refreshRequest, validation.(*validator.Validate)); apiErr != nil {
+		return nil, apiErr
+	}
+	refreshRequest.UserAgent = c.Request.UserAgent()
+	responseData, err := uc.userService.Refresh(refreshRequest)
+
+	if err != nil {
+		return nil, err.(*response.AppError)
+	}
+
+	return responseData, nil
+}

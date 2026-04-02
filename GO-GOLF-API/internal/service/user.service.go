@@ -8,4 +8,6 @@ type IUserService interface {
 	Register(username, purpose string) int
 	Login(loginUser models.LoginRequest) (*models.LoginResponse, interface{})
 	GetUserInfoById(id int) (*models.User, error)
+	LogOut(sessionId string) error
+	Refresh(refreshRequest models.RefreshRequest) (*models.LoginResponse, error)
 }

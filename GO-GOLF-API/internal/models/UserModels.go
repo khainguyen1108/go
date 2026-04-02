@@ -10,6 +10,11 @@ type LoginRequest struct {
 	UserAgent string
 }
 
+type RefreshRequest struct {
+	RefreshToken string `json:"refreshToken" validate:"required" code:"1003"`
+	UserAgent    string
+}
+
 type LoginResponse struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
@@ -65,7 +70,6 @@ type AccountSession struct {
 	IsUsed       int       `db:"is_used"`
 	IsRevoked    int       `db:"is_revoked"`
 	DeviceInfo   string    `db:"device_info"`
-	ExpiresAt    time.Time `db:"expires_at"`
 	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
 }

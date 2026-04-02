@@ -46,7 +46,7 @@ var (
 	refreshTokenSecret = []byte(global.Config.Jwt.RefreshSecretKey)
 )
 
-func GenerateTokens(userId int, sectionId string) (*models.LoginResponse, int64, error) {
+func GenerateTokens(userId int, sectionId string) (*models.LoginResponse, error) {
 	accessClaims := jwt.MapClaims{
 		"user_id":    userId,
 		"section_id": sectionId,
@@ -57,7 +57,7 @@ func GenerateTokens(userId int, sectionId string) (*models.LoginResponse, int64,
 	accessTokenObj := jwt.NewWithClaims(jwt.SigningMethodHS256, accessClaims)
 	accessToken, err := accessTokenObj.SignedString(accessTokenSecret)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 	expiredAt := time.Now().Add(24 * time.Hour).Unix()
 	refreshClaims := jwt.MapClaims{
@@ -70,13 +70,13 @@ func GenerateTokens(userId int, sectionId string) (*models.LoginResponse, int64,
 	refreshTokenObj := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims)
 	refreshToken, err := refreshTokenObj.SignedString(refreshTokenSecret)
 	if err != nil {
-		return nil, 0, err
+		return nil, err
 	}
 
 	return &models.LoginResponse{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
-	}, expiredAt, nil
+	}, nil
 }
 
 func VerifyAndParseJWT(tokenString string) (jwt.MapClaims, *response.AppError) {

@@ -15,12 +15,18 @@ const (
 	ErrCanNotDetectMapClaims   = 40005
 	ErrAlogrithmNotSupported   = 40006
 	ErrTokenExpired            = 40007
+	ErrInvalidRefreshToken     = 40008
+	ErrInvalidSessionId        = 40009
+	ErrUserAlreadyBlocked      = 40010
 
 	// Internal errors
 
 	ErrInternalError              = 50001
 	ErrGenerateTokenFailed        = 50004
 	ErrCreateAccountSessionFailed = 50005
+	ErrLogoutFailed               = 50006
+	ErrUpdateAccountSessionFailed = 50007
+	ErrRevokeAccountFailed        = 50008
 )
 
 // message
@@ -39,4 +45,10 @@ var msg = map[int]string{
 	ErrCanNotDetectMapClaims:      "cannot detect map claims from token",
 	ErrAlogrithmNotSupported:      "signing algorithm is not supported",
 	ErrTokenExpired:               "token is expired",
+	ErrLogoutFailed:               "failed to logout",
+	ErrInvalidRefreshToken:        "invalid refresh token",
+	ErrInvalidSessionId:           "invalid session id",
+	ErrUpdateAccountSessionFailed: "failed to update account session",
+	ErrRevokeAccountFailed:        "failed to revoke account session",
+	ErrUserAlreadyBlocked:         "user is already blocked please login again",
 }
