@@ -36,7 +36,7 @@ func AuthenMiddleware(userService service.IUserService) gin.HandlerFunc {
 		}
 		userId := int(claims["user_id"].(float64))
 		iat := int64(claims["iat"].(float64))
-		timeLimit, errRedis := RedisUtils.Get(context.Background(), strconv.Itoa(userId))
+		timeLimit, errRedis := RedisUtils.GetInt64(context.Background(), strconv.Itoa(userId))
 		if errRedis != nil && errRedis != redis.Nil {
 			response.HandleGlobalError(c, errRedis)
 			c.Abort()
@@ -44,15 +44,7 @@ func AuthenMiddleware(userService service.IUserService) gin.HandlerFunc {
 		}
 
 		if errRedis != redis.Nil {
-			timeStr, ok := timeLimit.(string)
-			if !ok {
-				response.HandleGlobalError(c, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, gin.Error{}))
-			}
-			ts, errParse := strconv.ParseInt(timeStr, 10, 64)
-			if errParse != nil {
-				response.HandleGlobalError(c, response.NewAppError(http.StatusInternalServerError, response.ErrInternalError, errParse))
-			}
-			if ts > iat {
+			if timeLimit > iat {
 				response.HandleGlobalError(c, response.NewAppError(http.StatusUnauthorized, response.ErrUserAlreadyBlocked, gin.Error{}))
 				c.Abort()
 				return

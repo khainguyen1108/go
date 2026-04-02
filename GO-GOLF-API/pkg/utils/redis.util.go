@@ -10,8 +10,8 @@ func Set(ctx context.Context, key string, value any, expiration time.Duration) e
 	return global.Rdb.Set(ctx, key, value, expiration).Err()
 }
 
-func Get(ctx context.Context, key string) (interface{}, error) {
-	return global.Rdb.Get(ctx, key).Result()
+func GetInt64(ctx context.Context, key string) (int64, error) {
+	return global.Rdb.Get(ctx, key).Int64()
 }
 
 func Delete(ctx context.Context, keys ...string) error {

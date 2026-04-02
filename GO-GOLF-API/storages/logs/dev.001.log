@@ -957,3 +957,7 @@
 {"level":"INFO","time":"2026-04-02T17:13:57.436+0700","caller":"middlewares/logger.middleware.go:29","msg":"[HTTP Access]","STATUS:":200,"METHOD:":"POST","PATH:":"/api/v1/app/public/user/login","START_TIME:":"2026-04-02T17:13:57.388+0700","LATENCY:":0.0485992,"CLIENT_IP:":"::1","USER_AGENT:":"PostmanRuntime/7.51.1"}
 {"level":"INFO","time":"2026-04-02T17:14:04.320+0700","caller":"middlewares/logger.middleware.go:29","msg":"[HTTP Access]","STATUS:":200,"METHOD:":"GET","PATH:":"/api/v1/app/user/me","START_TIME:":"2026-04-02T17:14:04.318+0700","LATENCY:":0.0023361,"CLIENT_IP:":"::1","USER_AGENT:":"PostmanRuntime/7.51.1"}
 {"level":"INFO","time":"2026-04-02T17:14:08.150+0700","caller":"middlewares/logger.middleware.go:29","msg":"[HTTP Access]","STATUS:":200,"METHOD:":"GET","PATH:":"/api/v1/app/user/me","START_TIME:":"2026-04-02T17:14:08.149+0700","LATENCY:":0.0006045,"CLIENT_IP:":"::1","USER_AGENT:":"PostmanRuntime/7.51.1"}
+{"level":"INFO","time":"2026-04-02T17:17:05.976+0700","caller":"initialize/mysql.go:24","msg":"InitMysql","dsn":"baonk:baonk123@tcp(127.0.0.1:33306)/shopdevgo?charset=utf8mb4&parseTime=True&loc=Local"}
+{"level":"INFO","time":"2026-04-02T17:17:05.978+0700","caller":"initialize/mysql.go:27","msg":"Initializing Mysql Successfully"}
+{"level":"INFO","time":"2026-04-02T17:17:05.987+0700","caller":"initialize/redis.go:30","msg":"InitRedis is running"}
+{"level":"INFO","time":"2026-04-02T17:17:05.987+0700","caller":"initialize/redis.go:41","msg":"value score is::","score":"100"}
